@@ -66,7 +66,9 @@ async function searchWithResilience(query) {
     console.log(params);
     console.log("---------------------------J10----------------------")
 
-    const googleTargetUrl = `https://google.com/search?${params.toString()}`;
+    # const googleTargetUrl = `https://google.com/search?${params.toString()}`;
+    const googleTargetUrl = `https://google.com/search?q=${encodeURIComponent(query)}`;
+    
     console.log("Google Search URL:--------------------J10----------------------")
     console.log(googleTargetUrl);
     console.log("--------------------------------------J10----------------------")
