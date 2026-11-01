@@ -98,7 +98,7 @@ async function searchWithResilience(query) {
             console.log(process.env.ZENROWS_KEY);
             console.log(browserHeaders);
             console.log(googleTargetUrl);
-            console.log(“response data:--------------”);
+            console.log("response data:--------------");
             console.log(response.data);
             console.log("---------------------------J10----------------------")
             return { provider: 'Google (ZenRows)', results: parseGoogleHtml(response.data) }; 
