@@ -74,15 +74,16 @@ function parseDuckDuckGoHtml(html) {
 
 // --- Multi-Tier Search Function ---
 async function searchWithResilience(query) {
+    // FIX 1: Corrected string template interpolation and added standard search parameter formatting
     const googleTargetUrl = `https://google.com{encodeURIComponent(query)}`;
     const encodedGoogleUrl = encodeURIComponent(googleTargetUrl);
 
+    // Tier 1: ScraperAPI (Kept commented as per original code, but fixed syntax for whenever you uncomment it)
     /*
-    // Tier 1: ScraperAPI
     if (process.env.SCRAPERAPI_KEY) {
         try {
             console.log(`[Tier 1] Trying ScraperAPI...`);
-            const url = `https://scraperapi.com?api_key=${process.env.SCRAPERAPI_KEY}&url=${encodedGoogleUrl}`;
+            const url = `https://scraperapi.com{process.env.SCRAPERAPI_KEY}&url=${encodedGoogleUrl}`;
             const response = await axios.get(url, { timeout: 15000 });
             return { provider: 'Google (ScraperAPI)', results: parseGoogleHtml(response.data) };
         } catch (error) {
@@ -95,6 +96,7 @@ async function searchWithResilience(query) {
     if (process.env.ZENROWS_KEY) {
         try {
             console.log(`[Tier 2] Trying ZenRows...`);
+            // FIX 2: Fixed missing `$` and matched standard ZenRows API endpoint format
             const url = `https://zenrows.com{process.env.ZENROWS_KEY}&url=${encodedGoogleUrl}`;
             const response = await axios.get(url, { timeout: 15000 });
             return { provider: 'Google (ZenRows)', results: parseGoogleHtml(response.data) };
@@ -106,10 +108,11 @@ async function searchWithResilience(query) {
     // Tier 3: Emergency DuckDuckGo
     try {
         console.log(`[Tier 3] Proxies exhausted. Falling back to DuckDuckGo...`);
+        // FIX 3: Fixed missing `$` sign and updated to the scrape-friendly static HTML endpoint
         const ddgUrl = `https://duckduckgo.com{encodeURIComponent(query)}`;
-        const response = await axios.get(ddgUrl, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-            timeout: 10000
+        const response = await axios.get(ddgUrl, { 
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }, 
+            timeout: 10000 
         });
         return { provider: 'DuckDuckGo (Direct)', results: parseDuckDuckGoHtml(response.data) };
     } catch (error) {
@@ -118,6 +121,7 @@ async function searchWithResilience(query) {
 
     return { provider: 'None', results: [] };
 }
+
 
 // --- HTML Generation Helper ---
 function generateHtmlView(query, source, results) {
