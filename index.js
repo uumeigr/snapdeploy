@@ -95,7 +95,9 @@ async function searchWithResilience(query) {
                 timeout: 15000
             });
             console.log("ZenRows params:--------------------J10----------------------")
-            console.log(params);
+            console.log(process.env.ZENROWS_KEY);
+            console.log(browserHeaders);
+            console.log(googleTargetUrl);
             console.log("---------------------------J10----------------------")
             return { provider: 'Google (ZenRows)', results: parseGoogleHtml(response.data) }; 
         } catch (error) { 
