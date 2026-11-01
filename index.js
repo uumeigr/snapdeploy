@@ -106,6 +106,29 @@ function generateHtmlView(query, source, results) {
     `;
 }
 
+// --- Root Directory Landing Page ---
+app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/html');
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Search Engine Scraper API</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background: #f8f9fa;">
+            <h1 style="color: #333;">🔍 Secure Search Engine Proxy Running</h1>
+            <p style="color: #666; font-size: 16px;">The API is live and healthy.</p>
+            <div style="background: #fff; display: inline-block; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px;">
+                <strong style="color: #d93025;">How to use it:</strong>
+                <p style="font-family: monospace; background: #eee; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                    /search?q=YOUR_QUERY&key=YOUR_PASSWORD
+                </p>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
 // --- Express API Endpoint ---
 app.get('/search', async (req, res) => {
     const query = req.query.q;
