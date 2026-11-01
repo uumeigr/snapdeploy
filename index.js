@@ -119,6 +119,11 @@ async function searchWithResilience(query) {
             },
             timeout: 10000
         });
+        console.log("DuckDuckGo response data:--------------------J10----------------------")
+        console.log(browserHeaders);
+        console.log(query);
+        console.log(response.data);
+        console.log("---------------------------J10----------------------")
         return { provider: 'DuckDuckGo (Direct fallback)', results: parseDuckDuckGoHtml(response.data) }; 
     } catch (error) { 
         console.error(`[Tier 2] DuckDuckGo failed: ${error.message}`); 
