@@ -9,15 +9,55 @@ const PORT = process.env.PORT || 3000;
 function parseGoogleHtml(html) {
     const $ = cheerio.load(html);
     const results = [];
-    $('.g').each((i, el) => {
-        const title = $(el).find('h3').text().trim();
-        const link = $(el).find('a').attr('href');
-        if (title && link && link.startsWith('http')) {
+
+    // Array of selectors Google uses across different devices, experiments, and updates
+    const googleResultSelectors = [
+        '.g',               // Classic container
+        '.tF2Cxc',          // Modern web container
+        'div.yuRUbf',       // Link/Title block wrapper
+        '.MjjYid',          // Alternative card wrapper
+        'div[data-sved]'    // Attribute-based fallback
+    ];
+
+    // Find the first selector that actually returns elements on this page payload
+    let activeSelector = '.g';
+    for (const selector of googleResultSelectors) {
+        if ($(selector).length > 0) {
+            activeSelector = selector;
+            break;
+        }
+    }
+
+    console.log(`[Parser] Extracting Google elements using selector: "${activeSelector}"`);
+
+    $(activeSelector).each((i, el) => {
+        // Multi-tier title and link lookup depending on structural changes
+        const titleEl = $(el).find('h3, h1, .LC20lb').first();
+        const linkEl = $(el).find('a[href^="http"]').first();
+
+        const title = titleEl.text().trim();
+        const link = linkEl.attr('href');
+
+        if (title && link) {
             results.push({ title, link });
         }
     });
+
+    // Emergency direct tag fallback if container blocks were entirely obfuscated
+    if (results.length === 0) {
+        console.warn(`[Parser] Structural containers hidden. Attempting direct anchor parsing fallback.`);
+        $('h3').each((i, el) => {
+            const title = $(el).text().trim();
+            const link = $(el).closest('a').attr('href') || $(el).find('a').attr('href');
+            if (title && link && link.startsWith('http')) {
+                results.push({ title, link });
+            }
+        });
+    }
+
     return results;
 }
+
 
 function parseDuckDuckGoHtml(html) {
     const $ = cheerio.load(html);
