@@ -115,10 +115,12 @@ async function searchWithResilience(query) {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
+            'Referer': 'https://html.duckduckgo.com/',
+            'Origin': 'https://html.duckduckgo.com',
             'Content-Type': 'application/x-www-form-urlencoded' // Required for HTML endpoint POST
         };
         const response = await axios({
-            url: 'https://html.duckduckgo.com',
+            url: 'https://html.duckduckgo.com/html/',
             method: 'POST',
             headers: browserHeadersForDD,
             data: new URLSearchParams({ q: query }).toString(), // Send query in the body
