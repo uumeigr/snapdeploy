@@ -77,6 +77,7 @@ async function searchWithResilience(query) {
     const googleTargetUrl = `https://google.com{encodeURIComponent(query)}`;
     const encodedGoogleUrl = encodeURIComponent(googleTargetUrl);
 
+    /*
     // Tier 1: ScraperAPI
     if (process.env.SCRAPERAPI_KEY) {
         try {
@@ -88,6 +89,7 @@ async function searchWithResilience(query) {
             console.warn(`[Tier 1] ScraperAPI failed: ${error.message}`);
         }
     }
+    */
 
     // Tier 2: ZenRows
     if (process.env.ZENROWS_KEY) {
