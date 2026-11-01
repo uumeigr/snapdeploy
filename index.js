@@ -94,6 +94,9 @@ async function searchWithResilience(query) {
                 },
                 timeout: 15000
             });
+            console.log("ZenRows params:--------------------J10----------------------")
+            console.log(params);
+            console.log("---------------------------J10----------------------")
             return { provider: 'Google (ZenRows)', results: parseGoogleHtml(response.data) }; 
         } catch (error) { 
             console.warn(`[Tier 1] ZenRows failed: ${error.message}`); 
