@@ -84,7 +84,7 @@ async function searchWithResilience(query) {
         try { 
             console.log(`[Tier 1] Trying ZenRows with clean params config...`); 
             const response = await axios({
-                url: 'https://zenrows.com',
+                url: 'https://api.zenrows.com/v1/',
                 method: 'GET',
                 headers: browserHeaders,
                 params: {
