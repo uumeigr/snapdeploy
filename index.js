@@ -115,10 +115,22 @@ async function searchWithResilience(query) {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate, br',
             'Referer': 'https://html.duckduckgo.com/',
-            'Origin': 'https://html.duckduckgo.com',
-            'Content-Type': 'application/x-www-form-urlencoded' // Required for HTML endpoint POST
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1'
         };
+
+        // tried in chrome, this work
+        // https://html.duckduckgo.com/html/?q=best+free+serverless
+        // https://html.duckduckgo.com/html?q=best+free+serverless
+        // this does not work
+        // https://html.duckduckgo.com/html/q=best+free+serverless
+        // https://html.duckduckgo.com/html/best+free+serverless
+        /*
         const response = await axios({
             url: 'https://html.duckduckgo.com/html/',
             method: 'POST',
@@ -126,6 +138,18 @@ async function searchWithResilience(query) {
             data: new URLSearchParams({ q: query }).toString(), // Send query in the body
             timeout: 10000
         });
+        */
+
+        const response = await axios({
+            url: `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`,
+            method: 'GET',
+            headers: browserHeadersForDD,
+            timeout: 10000
+        });
+
+        if (response.data.includes('anomaly-modal')) {
+            throw new Error('DuckDuckGo bot challenge triggered');
+        }
         console.log("DuckDuckGo response data:--------------------J10----------------------")
         console.log(browserHeadersForDD);
         console.log(query);
