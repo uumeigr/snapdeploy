@@ -139,10 +139,17 @@ async function searchWithResilience(query) {
             timeout: 10000
         });
         */
-
+        /*
         const response = await axios({
             url: `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`,
             method: 'GET',
+            headers: browserHeadersForDD,
+            timeout: 10000
+        });
+        */
+        // claude suggest
+        const response = await axios.get('https://html.duckduckgo.com/html/', {
+            params: { q: query },          // axios encodes this for you
             headers: browserHeadersForDD,
             timeout: 10000
         });
